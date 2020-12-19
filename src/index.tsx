@@ -1,11 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
-import App from './App';
+const Home: React.FC = () => {
+  return <h1>Hello World</h1>;
+};
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+export default Home;
