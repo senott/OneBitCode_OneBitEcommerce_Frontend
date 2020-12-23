@@ -5,5 +5,4 @@ export const FormContainer = styled(Row)`
   align-content: center;
   margin-top: auto;
   margin-left: auto;
-  /* height: 70vh; */
 `;

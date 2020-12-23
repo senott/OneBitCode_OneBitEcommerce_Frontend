@@ -3,9 +3,13 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './_app.css';
 import { persistor, store } from '../store';
+
+toast.configure();
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (

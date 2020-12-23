@@ -6,7 +6,7 @@ interface SignInData {
   password: string;
 }
 
-interface SignInResponse {
+export interface SignInResponse {
   data: User;
 }
 
@@ -18,15 +18,15 @@ interface SignUpData {
 }
 
 const UsersService = {
-  signUp: ({
+  signUp: async ({
     name, email, password, password_confirmation
   }: SignUpData) => {
-    api.post<void>('/auth/v1/user', {
+    return await api.post<void>('/auth/v1/user', {
       name, email, password, password_confirmation
     })
   },
-  signIn: ({ email, password }: SignInData) => {
-    api.post<SignInResponse>('auth/v1/user/sign_in', {
+  signIn: async ({ email, password }: SignInData) => {
+    return await api.post<SignInResponse>('auth/v1/user/sign_in', {
       email,
       password,
     });

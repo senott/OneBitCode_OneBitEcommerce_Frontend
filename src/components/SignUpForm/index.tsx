@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Col, FormControl, InputGroup, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -12,12 +12,12 @@ import { setLoggedUser } from '../../store/modules/auth/reducer';
 import BlueBackground from '../shared/BlueBackground';
 import { FormContainer } from './styles';
 
-interface LoginProps {
+interface SignUpProps {
   titlePhrase: string;
   buttonPhrase: string;
 }
 
-const LoginForm: React.FC<LoginProps> = ({ titlePhrase, buttonPhrase }) => {
+const SignUpForm: React.FC<SignUpProps> = ({ titlePhrase, buttonPhrase }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -25,46 +25,49 @@ const LoginForm: React.FC<LoginProps> = ({ titlePhrase, buttonPhrase }) => {
     (state: AuthState) => state.auth.loggedUser,
   );
 
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const passwordRef = useRef(null);
-
-  useEffect(() => {
-    if (loggedUser) {
-      setEmail(loggedUser.email);
-
-      if (passwordRef && passwordRef.current) {
-        passwordRef.current.focus();
-      }
-    }
-  }, [loggedUser]);
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
   const handleSubmit = async (evt: React.FormEvent) => {
     evt.preventDefault();
 
+    if (password !== passwordConfirmation) {
+      toast.error('A senha e a confirmação da senha devem ser iguais.');
+      return;
+    }
+
     try {
-      const response = await UsersService.signIn({
+      await UsersService.signUp({
+        name,
         email,
         password,
+        password_confirmation: passwordConfirmation,
       });
-      console.log(response);
-      const { id, email: userEmail, name, profile } = response.data.data;
 
-      const user = {
-        id,
-        name,
-        email: userEmail,
-        profile,
-      };
+      toast.success(
+        'registro realizado com sucesso! Para continuar faça seu login.',
+      );
 
-      dispatch(setLoggedUser(user));
+      dispatch(
+        setLoggedUser({
+          id: 0,
+          name,
+          email,
+          profile: 'client',
+        }),
+      );
 
-      toast.info('Login realizado com sucesso!');
-
-      router.push(user.profile === 'admin' ? '/Admin/' : '/');
+      setName('');
+      setEmail('');
+      setPassword('');
+      setPasswordConfirmation('');
     } catch (error) {
-      toast.error('E-mail ou senha inválidos.');
+      if (error.response.data.errors) {
+        toast.warning(error.response.data.errors.full_messages[0]);
+      }
+      console.log(error.response);
     }
   };
 
@@ -74,6 +77,15 @@ const LoginForm: React.FC<LoginProps> = ({ titlePhrase, buttonPhrase }) => {
         <Col lg={{ span: 6, offset: 3 }} md={{ span: 8, offset: 2 }}>
           <BlueBackground>
             <h4>{titlePhrase}</h4>
+            <InputGroup className="mt-3">
+              <FormControl
+                placeholder="Meu nome"
+                value={name}
+                type="text"
+                onChange={e => setName(e.target.value)}
+                required
+              />
+            </InputGroup>
             <InputGroup className="mt-3">
               <FormControl
                 placeholder="Meu e-mail"
@@ -89,7 +101,15 @@ const LoginForm: React.FC<LoginProps> = ({ titlePhrase, buttonPhrase }) => {
                 value={password}
                 type="password"
                 onChange={e => setPassword(e.target.value)}
-                ref={passwordRef}
+                required
+              />
+            </InputGroup>
+            <InputGroup className="mt-3">
+              <FormControl
+                placeholder="Confirmação senha"
+                value={passwordConfirmation}
+                type="password"
+                onChange={e => setPasswordConfirmation(e.target.value)}
                 required
               />
             </InputGroup>
@@ -106,4 +126,4 @@ const LoginForm: React.FC<LoginProps> = ({ titlePhrase, buttonPhrase }) => {
   );
 };
 
-export default LoginForm;
+export default SignUpForm;
