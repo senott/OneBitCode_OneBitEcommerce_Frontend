@@ -15,9 +15,17 @@ import { FormContainer } from './styles';
 interface SignUpProps {
   titlePhrase: string;
   buttonPhrase: string;
+  links?: {
+    path: string;
+    linkText: string;
+  }[];
 }
 
-const SignUpForm: React.FC<SignUpProps> = ({ titlePhrase, buttonPhrase }) => {
+const SignUpForm: React.FC<SignUpProps> = ({
+  titlePhrase,
+  buttonPhrase,
+  links,
+}) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -116,9 +124,14 @@ const SignUpForm: React.FC<SignUpProps> = ({ titlePhrase, buttonPhrase }) => {
             <Button type="submit" className="btn btn-info mt-3 w-100">
               {buttonPhrase}
             </Button>
-            <br />
-            <Link href="/Auth/PasswordRecovery">Esqueci minha senha</Link>
-            <br />
+            {links &&
+              links.map(link => {
+                return (
+                  <p>
+                    <Link href={link.path}>{link.linkText}</Link>
+                  </p>
+                );
+              })}
           </BlueBackground>
         </Col>
       </FormContainer>

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Col, FormControl, InputGroup, Row } from 'react-bootstrap';
+import { Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -15,9 +15,17 @@ import { FormContainer } from './styles';
 interface LoginProps {
   titlePhrase: string;
   buttonPhrase: string;
+  links?: {
+    path: string;
+    linkText: string;
+  }[];
 }
 
-const LoginForm: React.FC<LoginProps> = ({ titlePhrase, buttonPhrase }) => {
+const LoginForm: React.FC<LoginProps> = ({
+  titlePhrase,
+  buttonPhrase,
+  links,
+}) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -96,9 +104,14 @@ const LoginForm: React.FC<LoginProps> = ({ titlePhrase, buttonPhrase }) => {
             <Button type="submit" className="btn btn-info mt-3 w-100">
               {buttonPhrase}
             </Button>
-            <br />
-            <Link href="/Auth/PasswordRecovery">Esqueci minha senha</Link>
-            <br />
+            {links &&
+              links.map(link => {
+                return (
+                  <p>
+                    <Link href={link.path}>{link.linkText}</Link>
+                  </p>
+                );
+              })}
           </BlueBackground>
         </Col>
       </FormContainer>
