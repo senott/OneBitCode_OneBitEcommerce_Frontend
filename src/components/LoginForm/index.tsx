@@ -10,7 +10,7 @@ import User from '../../dtos/User';
 import UsersService from '../../services/users';
 import { setLoggedUser } from '../../store/modules/auth/reducer';
 import BlueBackground from '../shared/BlueBackground';
-import { FormContainer } from './styles';
+import { FormContainer, LinkText } from './styles';
 
 interface LoginProps {
   titlePhrase: string;
@@ -56,7 +56,6 @@ const LoginForm: React.FC<LoginProps> = ({
         email,
         password,
       });
-      console.log(response);
       const { id, email: userEmail, name, profile } = response.data.data;
 
       const user = {
@@ -68,7 +67,7 @@ const LoginForm: React.FC<LoginProps> = ({
 
       dispatch(setLoggedUser(user));
 
-      toast.info('Login realizado com sucesso!');
+      toast.success('Login realizado com sucesso!');
 
       router.push(user.profile === 'admin' ? '/Admin/' : '/');
     } catch (error) {
@@ -105,11 +104,13 @@ const LoginForm: React.FC<LoginProps> = ({
               {buttonPhrase}
             </Button>
             {links &&
-              links.map(link => {
+              links.map((link, index) => {
                 return (
-                  <p>
-                    <Link href={link.path}>{link.linkText}</Link>
-                  </p>
+                  <InputGroup key={index}>
+                    <Link href={link.path}>
+                      <LinkText>{link.linkText}</LinkText>
+                    </Link>
+                  </InputGroup>
                 );
               })}
           </BlueBackground>

@@ -7,7 +7,7 @@ const Login: React.FC = () => {
   const links = [
     {
       path: '/Auth/SignUp',
-      linkText: 'Cadastrar usuário',
+      linkText: 'Criar nova conta',
     },
     {
       path: '/Auth/PasswordRecovery',
