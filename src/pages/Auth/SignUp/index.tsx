@@ -7,7 +7,7 @@ const Login: React.FC = () => {
   const links = [
     {
       path: '/Auth/Login',
-      linkText: 'Voltar',
+      linkText: 'Acessar minha conta',
     },
   ];
 

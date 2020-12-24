@@ -7,3 +7,10 @@ export const FormContainer = styled(Row)`
   margin-left: auto;
   height: 70vh;
 `;
+
+export const LinkText = styled.span`
+  text-decoration: none;
+  color: #ffffff;
+  margin-top: 10px !important;
+  cursor: pointer;
+`;

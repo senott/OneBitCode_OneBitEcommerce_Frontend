@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { Button, Col, FormControl, InputGroup, Row } from 'react-bootstrap';
+import { Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -10,7 +10,7 @@ import User from '../../dtos/User';
 import UsersService from '../../services/users';
 import { setLoggedUser } from '../../store/modules/auth/reducer';
 import BlueBackground from '../shared/BlueBackground';
-import { FormContainer } from './styles';
+import { FormContainer, LinkText } from './styles';
 
 interface SignUpProps {
   titlePhrase: string;
@@ -47,23 +47,30 @@ const SignUpForm: React.FC<SignUpProps> = ({
     }
 
     try {
-      await UsersService.signUp({
+      const response = await UsersService.signUp({
         name,
         email,
         password,
         password_confirmation: passwordConfirmation,
       });
 
+      const {
+        id: userId,
+        name: userName,
+        email: userEmail,
+        profile: userProfile,
+      } = response.data.data;
+
       toast.success(
-        'registro realizado com sucesso! Para continuar faça seu login.',
+        'Registro realizado com sucesso! Para continuar faça seu login.',
       );
 
       dispatch(
         setLoggedUser({
-          id: 0,
-          name,
-          email,
-          profile: 'client',
+          id: userId,
+          name: userName,
+          email: userEmail,
+          profile: userProfile,
         }),
       );
 
@@ -71,6 +78,8 @@ const SignUpForm: React.FC<SignUpProps> = ({
       setEmail('');
       setPassword('');
       setPasswordConfirmation('');
+
+      router.push('/Auth/Login');
     } catch (error) {
       if (error.response.data.errors) {
         toast.warning(error.response.data.errors.full_messages[0]);
@@ -125,11 +134,13 @@ const SignUpForm: React.FC<SignUpProps> = ({
               {buttonPhrase}
             </Button>
             {links &&
-              links.map(link => {
+              links.map((link, index) => {
                 return (
-                  <p>
-                    <Link href={link.path}>{link.linkText}</Link>
-                  </p>
+                  <InputGroup key={index}>
+                    <Link href={link.path}>
+                      <LinkText>{link.linkText}</LinkText>
+                    </Link>
+                  </InputGroup>
                 );
               })}
           </BlueBackground>
