@@ -1,6 +1,6 @@
 import React from 'react';
-import AdminComponent from '../../components/shared/AdminComponent';
 
+import AdminComponent from '../../components/shared/AdminComponent';
 import WithAuthAdmin from '../../components/WithAuthAdmin';
 
 const Home: React.FC = () => {

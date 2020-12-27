@@ -5,7 +5,7 @@ export const HeaderContainer = styled(Row)`
   background-color: var(--color-primary);
   padding: 10px;
   border-radius: 10px;
-  margin-top: 100px;
+  margin-top: 40px;
 `;
 
 export const NameText = styled.span`
