@@ -1,17 +1,17 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 import { StyledButton } from './styles';
 
-interface ButtonProps {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: IconProp;
   action?: string;
-  type: string;
+  buttonType: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ icon, action, type }) => {
+const Button: React.FC<ButtonProps> = ({ icon, action, type, ...rest }) => {
   return (
-    <StyledButton>
+    <StyledButton {...rest}>
       {icon && <FontAwesomeIcon icon={icon} className={action && 'mr-2'} />}
       {action}
     </StyledButton>

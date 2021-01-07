@@ -1,5 +1,7 @@
 import React from 'react';
-import Button from '../Button';
+
+import Meta from '../../../dtos/Meta';
+import Pagination from '../Pagination';
 import { Container, StyledTable } from './styles';
 
 interface AdminListTableProps {
@@ -9,6 +11,7 @@ interface AdminListTableProps {
   fourthTitle?: string;
   fifthTitle?: string;
   sixthTitle?: string;
+  meta: Meta;
 }
 
 const AdminListTable: React.FC<AdminListTableProps> = ({
@@ -18,6 +21,7 @@ const AdminListTable: React.FC<AdminListTableProps> = ({
   fourthTitle,
   fifthTitle,
   sixthTitle,
+  meta,
   children,
 }) => {
   return (
@@ -38,17 +42,7 @@ const AdminListTable: React.FC<AdminListTableProps> = ({
         <tbody>{children}</tbody>
       </StyledTable>
 
-      <div className="pagination justify-content-end">
-        <div className="pagination">
-          <Button action="<" type="blue" />
-          <Button action="1" type="blue" />
-          <Button action="2" type="blue" />
-          <Button action="3" type="blue" />
-          ...
-          <Button action="31" type="blue" />
-          <Button action=">" type="blue" />
-        </div>
-      </div>
+      <Pagination {...meta} />
     </Container>
   );
 };
